@@ -158,6 +158,23 @@ def format_report_line(movie):
     genres = ", ".join(sorted(movie["genres"]))
 
     return f'"{title}" ({year}) — {rating}/10, {duration}, жанры: {genres}'
+def titles_sorted_by_rating(movies):
+    sorted_movies = sorted(
+        movies,
+        key=lambda movie: movie["rating"],
+        reverse=True
+    )
+    return [movie["title"] for movie in sorted_movies]
+def top_n_by_rating(movies, n=3):
+    sorted_movies = sorted(
+        movies,
+        key=lambda movie: movie["rating"],
+        reverse=True
+    )
+    return [
+        (movie["title"], movie["rating"])
+        for movie in sorted_movies[:n]
+    ]
 
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
@@ -169,3 +186,5 @@ if __name__ == "__main__":
     print("Нормализованное название:", normalize_title("silent hours"))
     print("Slug:", make_slug("The Quiet Algorithm"))
     print("Строка отчёта:", format_report_line(movies[7]))
+    print("Фильмы по рейтингу:", titles_sorted_by_rating(movies))
+    print("Топ-3 фильма:", top_n_by_rating(movies))
