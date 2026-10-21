@@ -139,7 +139,25 @@ def count_long_movies(movies, threshold=120):
             count += 1
 
     return count
+def normalize_title(title):
+    words = title.split()
+    normalized_words = []
 
+    for word in words:
+        normalized_word = word[0].upper() + word[1:].lower()
+        normalized_words.append(normalized_word)
+
+    return " ".join(normalized_words)
+def make_slug(title):
+    return title.lower().replace(" ", "-")
+def format_report_line(movie):
+    title = normalize_title(movie["title"])
+    year = movie["year"]
+    rating = movie["rating"]
+    duration = duration_in_hours(movie["duration_min"])
+    genres = ", ".join(sorted(movie["genres"]))
+
+    return f'"{title}" ({year}) — {rating}/10, {duration}, жанры: {genres}'
 
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
@@ -148,3 +166,6 @@ if __name__ == "__main__":
     print("Категория рейтинга:", rating_tier(9.2))
     print("Категория года:", decade_label(2024))
     print("Длинных фильмов:", count_long_movies(movies))
+    print("Нормализованное название:", normalize_title("silent hours"))
+    print("Slug:", make_slug("The Quiet Algorithm"))
+    print("Строка отчёта:", format_report_line(movies[7]))
