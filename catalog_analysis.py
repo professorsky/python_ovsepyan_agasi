@@ -131,6 +131,15 @@ def decade_label(year):
         case _:
             return "старые"
 
+def count_long_movies(movies, threshold=120):
+    count = 0
+
+    for movie in movies:
+        if movie["duration_min"] > threshold:
+            count += 1
+
+    return count
+
 
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
@@ -138,3 +147,4 @@ if __name__ == "__main__":
     print("Длительность:", duration_in_hours(155))
     print("Категория рейтинга:", rating_tier(9.2))
     print("Категория года:", decade_label(2024))
+    print("Длинных фильмов:", count_long_movies(movies))
