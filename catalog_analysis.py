@@ -202,6 +202,23 @@ def above_average_ratings(movies):
         for movie in movies
         if movie["rating"] > avg_rating
     }
+def all_genres(movies):
+    genres = set()
+
+    for movie in movies:
+        genres.update(movie["genres"])
+
+    return genres
+def common_actors(movie1, movie2):
+    actors1 = set(movie1["actors"])
+    actors2 = set(movie2["actors"])
+
+    return actors1 & actors2
+def genres_only_in_one(movies_a, movies_b):
+    genres_a = all_genres(movies_a)
+    genres_b = all_genres(movies_b)
+
+    return genres_a - genres_b
 
 if __name__ == "__main__":
     print("Средний рейтинг:", average_rating(movies))
@@ -218,3 +235,12 @@ if __name__ == "__main__":
     print("Количество фильмов по жанрам:", count_by_genre(movies))
     print("Фильмография актёров:", actor_filmography(movies))
     print("Фильмы выше среднего рейтинга:", above_average_ratings(movies))
+    print("Все жанры:", all_genres(movies))
+    print(
+        "Общие актёры:",
+        common_actors(movies[0], movies[3]),
+    )
+    print(
+        "Жанры только в первой группе:",
+        genres_only_in_one(movies[:5], movies[5:]),
+    )
