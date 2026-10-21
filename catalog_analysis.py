@@ -224,39 +224,38 @@ def iter_high_rated(movies, min_rating=8.0):
         if movie["rating"] >= min_rating:
             yield movie
 
+def build_report(movies):
+    print("ОТЧЕТ ПО КАТАЛОГУ")
+    print()
+
+    print(f"Средний рейтинг: {average_rating(movies)}")
+
+    age_stats = catalog_age_stats(movies)
+    print(f"Средний возраст фильмов: {age_stats[2]} лет")
+    print()
+
+    print("Топ-3 фильма:")
+    top_movies = top_n_by_rating(movies, 3)
+
+    for title, rating in top_movies:
+        movie = next(
+            movie for movie in movies
+            if movie["title"] == title
+        )
+        print(f"  {format_report_line(movie)}")
+
+    print("Фильмов по жанрам:")
+    genre_counts = count_by_genre(movies)
+
+    for genre, count in sorted(
+        genre_counts.items(),
+        key=lambda item: (-item[1], item[0]),
+    ):
+        print(f"  {genre} — {count}")
+    print()
+
+    genres = sorted(all_genres(movies))
+    print(f"Все жанры каталога: {', '.join(genres)}")
+
 if __name__ == "__main__":
-    print("Средний рейтинг:", average_rating(movies))
-    print("Статистика возраста:", catalog_age_stats(movies))
-    print("Длительность:", duration_in_hours(155))
-    print("Категория рейтинга:", rating_tier(9.2))
-    print("Категория года:", decade_label(2024))
-    print("Длинных фильмов:", count_long_movies(movies))
-    print("Нормализованное название:", normalize_title("silent hours"))
-    print("Slug:", make_slug("The Quiet Algorithm"))
-    print("Строка отчёта:", format_report_line(movies[7]))
-    print("Фильмы по рейтингу:", titles_sorted_by_rating(movies))
-    print("Топ-3 фильма:", top_n_by_rating(movies))
-    print("Количество фильмов по жанрам:", count_by_genre(movies))
-    print("Фильмография актёров:", actor_filmography(movies))
-    print("Фильмы выше среднего рейтинга:", above_average_ratings(movies))
-    print("Все жанры:", all_genres(movies))
-    print(
-        "Общие актёры:",
-        common_actors(movies[0], movies[3]),
-    )
-    print(
-        "Жанры только в первой группе:",
-        genres_only_in_one(movies[:5], movies[5:]),
-    )
-    print("Фильмы с высоким рейтингом:")
-
-    for movie in iter_high_rated(movies):
-        print(format_report_line(movie))
-
-    total_duration = sum(
-        movie["duration_min"]
-        for movie in movies
-        if movie["rating"] > 7.0
-    )
-
-    print("Общая длительность фильмов с рейтингом выше 7:", total_duration, "минут")
+    build_report(movies)
